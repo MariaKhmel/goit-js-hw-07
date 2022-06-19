@@ -1,44 +1,39 @@
+
 import { galleryItems } from './gallery-items.js';
 // Change code below this line
-console.log(galleryItems);
 
-const createGallery = document.querySelector('.gallery');
+const gallaryContainer = document.querySelector(".gallery");
+const items = createGallaryItems(galleryItems);
 
-const galleryMarkUp = createGalleryItems(galleryItems);
-let instance = "";
+gallaryContainer.insertAdjacentHTML('beforeend', items);
 
+gallaryContainer.addEventListener('click', onGallaryContainerClickHandler)
 
-createGallery.innerHTML = galleryMarkUp;
-
-
-
-createGallery.addEventListener('click', onImageClick);
-
-
-function createGalleryItems() {
-    return galleryItems.map(({ preview, original, description }) =>
-    `
- <div class="gallery__item">
+function createGallaryItems(galleryItems) {
+  return galleryItems.map(({preview, original, description}) => {
+        return `
+      <div class="gallery__item">
   <a class="gallery__link" href="${original}">
     <img
-      class="gallery__image  "
+      class="gallery__image"
       src="${preview}"
-      data-source='${original}'
+      data-source="${original}"
       alt="${description}"
     />
   </a>
-</div>`
-) .join('')
-    }  ;
+</div>`;
+  }).join("")  
+}
 
-function onImageClick(event) {
-    event.preventDefault();
-    const isPictureClicked = event.target.classList.contains('.gallery__image');
+let instance = "";
 
-    if (!isPictureClicked) {
-        return;
-    }
-
+function onGallaryContainerClickHandler(event) {  
+  event.preventDefault();
+  
+  if (event.target.nodeName !== "IMG") {
+    return
+  }
+  
   else {
    instance = basicLightbox.create(`
     <img src="${event.target.dataset.source}" width="800" height="600">
